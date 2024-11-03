@@ -1,5 +1,6 @@
 class QuestionModel {
   String question;
+
   bool answer;
 
   QuestionModel({
