@@ -20,7 +20,15 @@ class QuizBrain {
     return questionList[questionIndex].answer;
   }
 
+  String getNumberQuestion() {
+    return (questionIndex + 1).toString();
+  }
+
   void nextQuestion() {
-    questionIndex = questionIndex + 1;
+    if (questionIndex < questionList.length - 1) {
+      questionIndex++;
+    }
+
+    // questionIndex = questionIndex + 1;
   }
 }
