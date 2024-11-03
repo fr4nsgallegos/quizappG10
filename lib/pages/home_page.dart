@@ -7,8 +7,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final String question = '¿El hombre llegó a la luna?';
   QuizBrain quizBrain = QuizBrain();
+  void checkAnswer(bool userAnswer) {
+    bool correctAnswer = quizBrain.getQuestionAnswer();
+
+    if (correctAnswer == userAnswer) {
+      print("La respuesta es correcta");
+    } else {
+      print("incorrecto!!!!!!");
+    }
+
+    quizBrain.nextQuestion();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +55,9 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: MaterialButton(
                   color: Colors.greenAccent,
-                  onPressed: () {},
+                  onPressed: () {
+                    checkAnswer(true);
+                  },
                   child: Text("Verdadero"),
                   minWidth: double.infinity,
                 ),
@@ -55,7 +69,9 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: MaterialButton(
                   color: Colors.redAccent,
-                  onPressed: () {},
+                  onPressed: () {
+                    checkAnswer(false);
+                  },
                   child: Text("False"),
                   minWidth: double.infinity,
                 ),
