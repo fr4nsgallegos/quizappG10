@@ -1,7 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:quizappg10/models/quiz_brain.dart';
 
-class HomePage extends StatelessWidget {
-  final String question = '¿El hombre llegó a la luna?';
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  QuizBrain quizBrain = QuizBrain();
+  List<Widget> score = [];
+
+  Widget itemScoreWidget(String numberQuestion, bool isCorrect) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          numberQuestion,
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
+        Icon(
+          isCorrect ? Icons.check : Icons.close,
+          color: isCorrect ? Colors.greenAccent : Colors.red,
+        ),
+      ],
+    );
+  }
+
+  void checkAnswer(bool userAnswer, String numberQuestion) {
+    bool correctAnswer = quizBrain.getQuestionAnswer();
+
+    if (correctAnswer == userAnswer) {
+      print("La respuesta es correcta");
+      score.add(itemScoreWidget(numberQuestion, true));
+    } else {
+      print("incorrecto!!!!!!");
+      score.add(itemScoreWidget(numberQuestion, false));
+    }
+    
+    // quizBrain.nextQuestion();
+    
+    if( quizBrain.isFinished() ){
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Fin del juego"),
+            content: Text("Has terminado el juego"),
+            backgroundColor: Colors.white             ,
+            elevation: 10.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  quizBrain.nextQuestion();
+                  quizBrain.reset();
+                  score.clear();
+                  setState(() {});
+                },
+                child: Text("Cerrar"),
+              )
+            ],
+          );
+        });
+
+    }else{
+      quizBrain.nextQuestion();
+    }
+    // quizBrain.questionIndex ==0 ? score.clear() : quizBrain.nextQuestion();
+    // score.length == quizBrain.questionList.length
+    //     ? score.clear()
+    //     : quizBrain.nextQuestion();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,93 +83,62 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
         title: Text(
-            'Quizz App',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-            )
-
+          'Quizz App',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
           ),
+        ),
         backgroundColor: Colors.grey[850],
         centerTitle: true,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              question,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Spacer(),
-          SizedBox(height: 20),
-          // Botón para "Verdadero"
-          SizedBox(
-            width: double.infinity, 
-            child: ElevatedButton(
-              onPressed: () {
-                // Acción para respuesta "Verdadero"
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green, // color del botón corregido
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 80),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // Esquinas ligeramente redondeadas
-                ),
-              ),
-              child: Text(
-                'Verdadero',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
+      body: Center(
+        child: Column(
+          children: [
+            Expanded(
+              flex: 5,
+              child: Center(
+                child: Text(
+                  quizBrain.getQuestionText(),
+                  style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 10),
-          // Botón para "Falso"
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                // Acción para respuesta "Falso"
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red, // color del botón corregido
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 80),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // Esquinas ligeramente redondeadas
-                ),
-              ),
-              child: Text(
-                'Falso',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
+            // Spacer(),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MaterialButton(
+                  color: Colors.greenAccent,
+                  onPressed: () {
+                    checkAnswer(true, quizBrain.getNumberQuestion());
+                  },
+                  child: Text("Verdadero"),
+                  minWidth: double.infinity,
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 20),
-          // Indicador de respuesta
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '1',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MaterialButton(
+                  color: Colors.redAccent,
+                  onPressed: () {
+                    checkAnswer(false, quizBrain.getNumberQuestion());
+                  },
+                  child: Text("False"),
+                  minWidth: double.infinity,
+                ),
               ),
-              SizedBox(width: 5),
-              Icon(Icons.close, color: Colors.red, size: 30),
-            ],
-          ),
-        ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: score,
+            )
+          ],
+        ),
       ),
     );
   }
