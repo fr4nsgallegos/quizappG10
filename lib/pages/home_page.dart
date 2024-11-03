@@ -37,7 +37,67 @@ class _HomePageState extends State<HomePage> {
       score.add(itemScoreWidget(numberQuestion, false));
     }
 
-    quizBrain.nextQuestion();
+    if (quizBrain.isFinished()) {
+      // showDialog(
+      //   // barrierDismissible: false,
+      //   context: context,
+      //   builder: (BuildContext context) {
+      //     return AlertDialog(
+      //       scrollable: true,
+      //       title: Text("Alerta"),
+      //       content: Column(
+      //         children: [
+      //           Text("Has llegado al final del formulario"),
+      //           Container(
+      //             height: 250,
+      //             width: 20,
+      //             color: Colors.orange,
+      //           ),
+      //           Text("Has llegado al final del formulario"),
+      //           Container(
+      //             height: 250,
+      //             width: 20,
+      //             color: Colors.orange,
+      //           ),
+      //           Text("Has llegado al final del formulario"),
+      //           Container(
+      //             height: 250,
+      //             width: 20,
+      //             color: Colors.orange,
+      //           ),
+      //         ],
+      //       ),
+      //       backgroundColor: Colors.blueAccent,
+      //       elevation: 10.0,
+      //       shape: RoundedRectangleBorder(
+      //         borderRadius: BorderRadius.circular(25),
+      //       ),
+      //       actions: [
+      //         TextButton(
+      //           onPressed: () {
+      //             Navigator.pop(context);
+      //             quizBrain.nextQuestion();
+      //             score.clear();
+      //             setState(() {});
+      //           },
+      //           child: Text("OK"),
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // );
+    } else {
+      quizBrain.nextQuestion();
+    }
+
+    // if (quizBrain.questionIndex == 0) {
+    //   score.clear();
+    // }
+
+    // score.length == quizBrain.questionList.length
+    //     ? score.clear()
+    //     : quizBrain.nextQuestion();
+
     setState(() {});
   }
 
@@ -76,7 +136,9 @@ class _HomePageState extends State<HomePage> {
                 child: MaterialButton(
                   color: Colors.greenAccent,
                   onPressed: () {
-                    checkAnswer(true, quizBrain.getNumberQuestion());
+                    quizBrain.isFinished() == true
+                        ? null
+                        : checkAnswer(true, quizBrain.getNumberQuestion());
                   },
                   child: Text("Verdadero"),
                   minWidth: double.infinity,
@@ -90,7 +152,9 @@ class _HomePageState extends State<HomePage> {
                 child: MaterialButton(
                   color: Colors.redAccent,
                   onPressed: () {
-                    checkAnswer(false, quizBrain.getNumberQuestion());
+                    quizBrain.isFinished() == true
+                        ? null
+                        : checkAnswer(false, quizBrain.getNumberQuestion());
                   },
                   child: Text("False"),
                   minWidth: double.infinity,

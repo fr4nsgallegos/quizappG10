@@ -27,8 +27,24 @@ class QuizBrain {
   void nextQuestion() {
     if (questionIndex < questionList.length - 1) {
       questionIndex++;
+    } else {
+      questionIndex = 0;
     }
 
     // questionIndex = questionIndex + 1;
+  }
+
+  void restartIndex() {
+    questionIndex = 0;
+  }
+
+  bool isFinished() {
+    // if (questionIndex >= questionList.length - 1) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+
+    return questionIndex >= questionList.length - 1;
   }
 }
