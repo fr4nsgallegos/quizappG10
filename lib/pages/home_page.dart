@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:quizappg10/models/quiz_brain.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final String question = '¿El hombre llegó a la luna?';
-
+  QuizBrain quizBrain = QuizBrain();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +31,7 @@ class HomePage extends StatelessWidget {
               flex: 5,
               child: Center(
                 child: Text(
-                  question,
+                  quizBrain.getQuestionText(),
                   style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
               ),
