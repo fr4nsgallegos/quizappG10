@@ -87,12 +87,12 @@ class HomePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.close, color: Colors.red, size: 30),
-              SizedBox(width: 10),
               Text(
-                '1 x',
+                '1',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
+              SizedBox(width: 5),
+              Icon(Icons.close, color: Colors.red, size: 30),
             ],
           ),
         ],
